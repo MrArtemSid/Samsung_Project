@@ -1,4 +1,5 @@
 package com.example.testnode;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -137,5 +138,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         ImageView obj = (ImageView) v;
         obj.setRotation((obj.getRotation() + 90) % 360);
+
+        int id = obj.getId();
+        int [] neighbours = {-1, -1, -1, -1}; // up, down, left, right
+
+        int id_i = id / W;
+        int id_j = id % W;
+        if (id_i > 1) {
+            neighbours[0] = id - W;
+        }
+        if (id_i < W - 1) {
+            neighbours[1] = id + W;
+        }
+        if (id_j > 0) {
+            neighbours[2] = id - 1;
+        }
+        if (id_j < W - 1) {
+            neighbours[3] = id + 1;
+        }
+        obj.setColorFilter(Color.BLACK);
+        for (int i = 0; i < 4; ++i) {
+            int neighbour = neighbours[i];
+            if (neighbours[i] == -1)
+                continue;
+            if (gridLayout.getChildAt(neighbours[i]).getRotation() != obj.getRotation()) {
+                //matrix.get(neighbours[i]).removeIf(x -> (x == id));
+                //matrix.get(id).removeIf(x -> (x == neighbour));
+            } else {
+                //matrix.get(neighbours[i]).add(id);
+                //matrix.get(id).add(neighbours[i]);
+                obj.setColorFilter(Color.BLUE);
+            }
+        }
     }
 }
