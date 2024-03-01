@@ -1,5 +1,4 @@
 package com.example.testnode;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,14 +37,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean[] used = new boolean[200];
     boolean isD = false;
 
-    void dfs(int v, int start, int finish){
+    void dfs(int v, int finish){
         if(v == finish){
             isD = true;
         }
         used[v] = true;
         for(int u : matrix.get(v)){
             if(!used[u]){
-                dfs(u,start,finish);
+                dfs(u,finish);
             }
         }
     }
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d("attempt",cnt.toString());
                     cnt++;
                     used = new boolean[200];
-                    dfs(start,start,finish);
+                    dfs(start,finish);
                 }while(!isD);
             }
 
@@ -137,6 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         ImageView obj = (ImageView) v;
-        obj.setRotation(obj.getRotation()+90);
+        obj.setRotation((obj.getRotation() + 90) % 360);
     }
 }
