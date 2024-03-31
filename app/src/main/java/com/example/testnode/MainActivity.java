@@ -1,4 +1,8 @@
 package com.example.testnode;
+
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -6,6 +10,11 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.testnode.nodes.AngleNode;
+import com.example.testnode.nodes.LineNode;
+import com.example.testnode.nodes.Node;
+import com.example.testnode.nodes.TriAngleNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +24,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private GridLayout gridLayout;
     private LinkedList<ImageView> nodesImages = new LinkedList<>();
+    private LinkedList<Node> nodes = new LinkedList<>();
     private Level[] levels;
     private final int W = 5;
     private final int H = 5;
@@ -48,6 +58,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
+    void changeColor(int index, int color){
+        nodesImages.get(index).setColorFilter(color,PorterDuff.Mode.SRC_IN);
+    }
+
+    void checkConnect(int i){
+        boolean change = false;
+            try{
+                if(nodes.get(i).compareConnect(nodes.get(i - 1), Directions.LEFT) && i % W != 0){
+                    changeColor(i - 1,Color.BLUE);
+                    if(!used[i - 1]) {
+                        used[i - 1] = true;
+                        checkConnect(i - 1);
+                    }
+                    change = true;
+                }
+            }catch (Exception e){}
+            try{
+                if(nodes.get(i).compareConnect(nodes.get(i + 1), Directions.RIGHT) && (i + 1) % W != 0){
+                    change = true;
+                    changeColor(i + 1,Color.BLUE);
+                    if(!used[i + 1]) {
+                        used[i + 1] = true;
+                        checkConnect(i + 1);
+                    }
+                }
+            }catch (Exception e){}
+            try{
+                if(nodes.get(i).compareConnect(nodes.get(i + W), Directions.DOWN)){
+                    change = true;
+                    changeColor(i + W,Color.BLUE);
+                    if(!used[i + W]) {
+                        used[i + W] = true;
+                        checkConnect(i + W);
+                    }
+                }
+            }catch (Exception e){}
+            try{
+                if(nodes.get(i).compareConnect(nodes.get(i - W), Directions.UP)) {
+                    change = true;
+                    changeColor(i - W,Color.BLUE);
+                    if(!used[i - W]) {
+                        used[i - W] = true;
+                        checkConnect(i - W);
+                    }
+                }
+            }catch (Exception e){}
+            if(change){
+                changeColor(i,Color.BLUE);
+            }
+    }
+
 
     boolean existW(int pos, int border, ArrayList<Integer> number){
         return pos >= 0 && pos < border && number.get(pos) != 0;
@@ -61,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(int i = 0; i < NUMBER_OF_LEVELS; i++){
             levels[i] = new Level(i + 1);
         }
-        int start = 0;
+        int start = 3;
         int finish = 23;
             for (int currLvl = 0; currLvl < NUMBER_OF_LEVELS; currLvl++) {
                 Integer cnt = 0;
@@ -91,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     cnt++;
                     used = new boolean[200];
                     dfs(start,finish);
+                    if(levels[currLvl].getGraph().get(0).get(start) == 0){
+                        isD = false;
+                    }
                 }while(!isD);
             }
 
@@ -108,28 +172,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     void showGraph(){
-        int currLvl = 1;
+        int currLvl = 0;
         for(int i = 0; i < W; i++){
             for(int j = 0; j < H; j++){
                 nodesImages.add(new ImageView(this));
                 if(!levels[currLvl].isGraphEmpty(i)){
-                    switch (levels[currLvl].getNumber(i,j)){
+                    switch (levels[currLvl].getNumber(i, j)){
                         case 1:
-                            nodesImages.getLast().setImageResource(R.mipmap.line);
+                            nodes.add(new LineNode());
                             break;
                         case 2:
-                            nodesImages.getLast().setImageResource(R.mipmap.angle);
+                            nodes.add(new AngleNode());
                             break;
                         case 3:
-                            nodesImages.getLast().setImageResource(R.mipmap.angle3);
+                            nodes.add(new TriAngleNode());
                             break;
                         default:
-                            nodesImages.getLast().setImageResource(R.mipmap.blank);
+                            nodes.add(new Node());
                     }
+                    nodesImages.getLast().setImageResource(nodes.getLast().getResId());
                     nodesImages.getLast().setOnClickListener(this);
                 }
-                nodesImages.getLast().setId(nodesImages.size());
+                nodesImages.getLast().setId(nodesImages.size() - 1);
                 gridLayout.addView(nodesImages.getLast());
+            }
+        }
+        connect();
+    }
+    void connect(){
+        checkConnect(3);
+        for(int i = 0; i < W * H; i++){
+            if(!used[i]){
+                changeColor(i,Color.BLACK);
             }
         }
     }
@@ -137,5 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         ImageView obj = (ImageView) v;
         obj.setRotation((obj.getRotation() + 90) % 360);
+        nodes.get(v.getId()).changeDirection();
+        used = new boolean[200];
+        connect();
     }
 }
