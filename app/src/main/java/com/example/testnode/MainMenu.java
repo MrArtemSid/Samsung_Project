@@ -7,13 +7,13 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainMenu extends AppCompatActivity {
-    Button startBtn;
-    Button scoreBtn;
-    Button dummyBtn;
+    Button btnPlay;
+    Button btn;
+    Button btn1;
 
     void init(){
-        startBtn = findViewById(R.id.StartBtn);
-        startBtn.setOnClickListener(new View.OnClickListener() {
+        btnPlay = findViewById(R.id.btnPlay);
+        btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -23,7 +23,7 @@ public class MainMenu extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mainmenu);
+        setContentView(R.layout.activity_main_menu);
         init();
     }
 }

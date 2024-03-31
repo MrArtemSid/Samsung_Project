@@ -3,12 +3,14 @@ package com.example.testnode;
 import java.util.ArrayList;
 
 public class Level {
-    private int numberLvl;
+    private int W;
+    private int H;
     private ArrayList<ArrayList<Integer>> graph;
 
-    public Level(int numberLvl) {
-        this.numberLvl = numberLvl;
+    public Level(int W, int H) {
         graph = new ArrayList<>();
+        this.W = W;
+        this.H = H;
     }
 
     public void clearGraph(){
@@ -33,17 +35,16 @@ public class Level {
     public boolean isGraphEmpty(int pos){
         return graph.get(pos).isEmpty();
     }
-
-    public int getNumberLvl() {
-        return numberLvl;
-    }
-
-    public void setNumberLvl(int numberLvl) {
-        this.numberLvl = numberLvl;
-    }
-
     public ArrayList<ArrayList<Integer>> getGraph() {
         return graph;
+    }
+
+    public int getW() {
+        return W;
+    }
+
+    public int getH() {
+        return H;
     }
 
 }
