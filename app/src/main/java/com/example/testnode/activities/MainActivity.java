@@ -1,35 +1,32 @@
-package com.example.testnode;
+package com.example.testnode.activities;
 
+import android.content.Context;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.testnode.nodes.AngleNode;
-import com.example.testnode.nodes.LineNode;
+import com.example.testnode.gameLogic.Directions;
+import com.example.testnode.gameLogic.Game;
+import com.example.testnode.R;
 import com.example.testnode.nodes.Node;
-import com.example.testnode.nodes.TriAngleNode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private GridLayout gridLayout;
     private LinkedList<ImageView> nodesImages = new LinkedList<>();
     private Game game;
-
-    //INTENT///////////////////////
-    private final int W = 5;
-    private final int H = 5;
-    ///////////////////////////////
+    private int W;
+    private int H;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +36,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void init(){
+        this.W = getIntent().getIntExtra("W",5);
+        this.H = getIntent().getIntExtra("H",5);
         gridLayout = findViewById(R.id.grid_activity);
         gridLayout.setColumnCount(H);
-        game = new Game(W, H);
+        game = new Game(W,H);
         game.createLevels();
         game.createNodesMatrix();
         showGraph();
     }
-    boolean[] used = new boolean[W * H + 1];
+    boolean[] used;
 
     void changeColor(int index, int color){
         nodesImages.get(index).setColorFilter(color,PorterDuff.Mode.SRC_IN);
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             change = true;
         }
-        if(RIGHT < W * H &&
+        if(RIGHT < W*H &&
                 game.getNodes().get(curr).compareConnect(game.getNodes().get(RIGHT), Directions.RIGHT) && RIGHT % W != 0){
             change = true;
             changeColor(RIGHT,Color.BLUE);
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 checkConnect(RIGHT);
             }
         }
-        if(DOWN < W * H &&
+        if(DOWN < W*H &&
                 game.getNodes().get(curr).compareConnect(game.getNodes().get(DOWN), Directions.DOWN)){
             change = true;
             changeColor(DOWN,Color.BLUE);
@@ -102,28 +101,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void showGraph(){
+        Display display = getWindowManager().getDefaultDisplay();
         for(Node node : game.getNodes()){
             nodesImages.add(new ImageView(this));
             nodesImages.getLast().setImageResource(node.getResId());
             nodesImages.getLast().setOnClickListener(this);
             nodesImages.getLast().setId(nodesImages.size() - 1);
+            nodesImages.getLast().setLayoutParams(new GridView.LayoutParams(display.getWidth() / W,display.getHeight() / H));
             gridLayout.addView(nodesImages.getLast());
         }
         connect();
     }
     void connect(){
-        checkConnect(3);
-        for(int i = 0; i < W * H; i++){
+        used = new boolean[W*H + 1];
+        checkConnect(game.getStart());
+        for(int i = 0; i < W*H; i++){
             if(!used[i]){
-                changeColor(i, Color.BLACK);
+                changeColor(i,Color.BLACK);
             }
         }
     }
     @Override
     public void onClick(View v) {
-        v.setRotation((v.getRotation() + 90) % 360);
+        v.setRotation((v.getRotation()+90) % 360);
         game.getNodes().get(v.getId()).changeDirection();
-        used = new boolean[W * H + 1];
+        used = new boolean[W*H+1];
         connect();
     }
 }

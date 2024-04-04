@@ -6,5 +6,7 @@
         <item name="android:layout_marginRight">48sp</item>
         <item name="android:layout_marginTop">14sp</item>
         <item name="android:padding">14sp</item>
+        <item name="android:textSize">30sp</item>
+        <item name="fontFamily">@font/borsok</item>
     </style>
 </resources>

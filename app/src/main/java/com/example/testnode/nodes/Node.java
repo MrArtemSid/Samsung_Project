@@ -1,6 +1,6 @@
 package com.example.testnode.nodes;
 
-import com.example.testnode.Directions;
+import com.example.testnode.gameLogic.Directions;
 import com.example.testnode.R;
 
 public class Node {

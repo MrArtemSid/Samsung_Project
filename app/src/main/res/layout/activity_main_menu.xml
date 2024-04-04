@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainMenu">
+    tools:context=".activities.MainMenu">
 
     <Button
         android:id="@+id/btnPlay"
-        android:text="@string/btnPlay"
-        android:fontFamily="@font/borsok"
+        android:text="@string/play"
         style="@style/BorderBtn"
-        android:textSize="30sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,10 +22,7 @@
     <Button
         android:id="@+id/btnLeaderBoard"
         style="@style/BorderBtn"
-        android:text="@string/btnLeaderBoard"
-        android:shadowColor="#00FF04"
-        android:textSize="30sp"
-        android:fontFamily="@font/borsok"
+        android:text="@string/leaderBoard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,9 +35,7 @@
     <Button
         style="@style/BorderBtn"
         android:id="@+id/btnQuit"
-        android:text="@string/btnQuit"
-        android:textSize="30sp"
-        android:fontFamily="@font/borsok"
+        android:text="@string/quit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -52,6 +45,60 @@
         app:layout_constraintTop_toBottomOf="@+id/btnLeaderBoard"
         app:layout_constraintVertical_bias="0.0" />
 
+    <EditText
+        android:id="@+id/w"
+        android:hint="ШИРИНА"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/h"
+        app:layout_constraintTop_toBottomOf="@+id/btnQuit"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <EditText
+        android:hint="ВЫСОТА"
+        android:id="@+id/h"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnQuit" />
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="name"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/btnPlay"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.134"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <EditText
+        android:id="@+id/point"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="point"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/btnPlay"
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintVertical_bias="0.059"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/btnSend"
+        style="@style/BorderBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SEND"
+        app:layout_constraintBottom_toTopOf="@+id/btnPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/point"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

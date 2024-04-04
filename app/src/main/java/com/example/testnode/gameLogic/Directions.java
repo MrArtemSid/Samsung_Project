@@ -1,4 +1,4 @@
-package com.example.testnode;
+package com.example.testnode.gameLogic;
 
 public enum Directions {
     UP(0),
