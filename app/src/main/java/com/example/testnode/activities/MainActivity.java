@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             nodesImages.getLast().setImageResource(node.getResId());
             nodesImages.getLast().setOnClickListener(this);
             nodesImages.getLast().setId(nodesImages.size() - 1);
-            nodesImages.getLast().setLayoutParams(new GridView.LayoutParams(display.getWidth() / W,display.getHeight() / H));
+            nodesImages.getLast().setLayoutParams(new GridView.LayoutParams(display.getWidth() / W,display.getWidth() / H));
             gridLayout.addView(nodesImages.getLast());
         }
         connect();
