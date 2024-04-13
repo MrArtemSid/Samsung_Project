@@ -108,6 +108,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             nodesImages.getLast().setOnClickListener(this);
             nodesImages.getLast().setId(nodesImages.size() - 1);
             nodesImages.getLast().setLayoutParams(new GridView.LayoutParams(display.getWidth() / W,display.getWidth() / H));
+            if (nodesImages.getLast().getId() == game.getStart() || nodesImages.getLast().getId() == game.getFinish())
+                nodesImages.getLast().setBackground(ContextCompat.getDrawable(this, R.drawable.gold_border));
+            /*else
+                nodesImages.getLast().setBackground(ContextCompat.getDrawable(this, R.drawable.normal_border));
+            */
             gridLayout.addView(nodesImages.getLast());
         }
         connect();
