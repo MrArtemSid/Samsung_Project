@@ -77,7 +77,7 @@ public class Game {
         for (int i = 0; i < level.getW(); i++) {
             level.setGraph();
             for (int j = 0; j < level.getH(); j++) {
-                level.getGraph(i).add(random.nextInt(4));
+                level.getGraph(i).add(random.nextInt(3) % 3 + 1);
             }
         }
     }
@@ -96,7 +96,7 @@ public class Game {
                             nodes.add(new TriAngleNode());
                             break;
                         default:
-                            nodes.add(new Node());
+                            //nodes.add(new Node());
                     }
                 }
             }
