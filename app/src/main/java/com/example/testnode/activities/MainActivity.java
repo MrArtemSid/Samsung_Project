@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Game game;
     private int W;
     private int H;
+    private final Directions UP = Directions.UP;
+    private final Directions RIGHT = Directions.RIGHT;
+    private final Directions DOWN = Directions.DOWN;
+    private final Directions LEFT = Directions.LEFT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,45 +57,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void checkConnect(int curr){
         boolean change = false;
 
-        int UP = curr - W;
-        int RIGHT = curr + 1 ;
-        int DOWN = curr + W;
-        int LEFT = curr - 1;
+        int up = curr - W;
+        int right = curr + 1 ;
+        int down = curr + W;
+        int left = curr - 1;
 
-        if(LEFT >= 0 &&
-                game.getNodes().get(curr).compareConnect(game.getNodes().get(LEFT), Directions.LEFT) && curr % W != 0){
-            changeColor(LEFT,Color.BLUE);
-            if(!used[LEFT]) {
-                used[LEFT] = true;
-                checkConnect(LEFT);
+        if(left >= 0 &&
+                game.getNodes().get(curr).compareConnect(game.getNodes().get(left), LEFT) && curr % W != 0){
+            changeColor(left,Color.BLUE);
+            if(!used[left]) {
+                used[left] = true;
+                checkConnect(left);
             }
             change = true;
         }
-        if(RIGHT < W*H &&
-                game.getNodes().get(curr).compareConnect(game.getNodes().get(RIGHT), Directions.RIGHT) && RIGHT % W != 0){
+        if(right < W*H &&
+                game.getNodes().get(curr).compareConnect(game.getNodes().get(right), RIGHT) && right % W != 0){
             change = true;
-            changeColor(RIGHT,Color.BLUE);
-            if(!used[RIGHT]) {
-                used[RIGHT] = true;
-                checkConnect(RIGHT);
+            changeColor(right,Color.BLUE);
+            if(!used[right]) {
+                used[right] = true;
+                checkConnect(right);
             }
         }
-        if(DOWN < W*H &&
-                game.getNodes().get(curr).compareConnect(game.getNodes().get(DOWN), Directions.DOWN)){
+        if(down < W*H &&
+                game.getNodes().get(curr).compareConnect(game.getNodes().get(down), DOWN)){
             change = true;
-            changeColor(DOWN,Color.BLUE);
-            if(!used[DOWN]) {
-                used[DOWN] = true;
-                checkConnect(DOWN);
+            changeColor(down,Color.BLUE);
+            if(!used[down]) {
+                used[down] = true;
+                checkConnect(down);
             }
         }
-        if(UP >= 0 &&
-                game.getNodes().get(curr).compareConnect(game.getNodes().get(UP), Directions.UP)) {
+        if(up >= 0 &&
+                game.getNodes().get(curr).compareConnect(game.getNodes().get(up), UP)) {
             change = true;
-            changeColor(UP,Color.BLUE);
-            if(!used[UP]) {
-                used[UP] = true;
-                checkConnect(UP);
+            changeColor(up,Color.BLUE);
+            if(!used[up]) {
+                used[up] = true;
+                checkConnect(up);
             }
         }
 
