@@ -65,7 +65,7 @@ public class Game {
             }
             used = new boolean[W * H + 1];
             dfs(start,finish);
-            if(level.getGraph().get(0).get(start) == 0){
+            if(level.getNumber(start) == 0){
                 isD = false;
             }
         }while(!isD);
