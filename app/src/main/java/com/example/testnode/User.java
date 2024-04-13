@@ -1,9 +1,14 @@
 package com.example.testnode;
 
-public class User {
-    String name;
-    Long points;
-    public User(){}
+import java.io.Serializable;
+
+public class User implements Serializable {
+    private String name;
+    private Long points;
+    public User(){
+        name = "defName";
+        points = 0L;
+    }
     public User(String name, Long points){
         this.name = name;
         this.points = points;
@@ -16,8 +21,10 @@ public class User {
     public String getName() {
         return name;
     }
-
     public Long getPoints() {
         return points;
+    }
+    public void addPoint(){
+        this.points++;
     }
 }

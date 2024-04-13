@@ -1,21 +1,38 @@
 package com.example.testnode.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.testnode.DB;
 import com.example.testnode.R;
+import com.example.testnode.User;
+import com.example.testnode.gameLogic.SaveGame;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class MainMenu extends AppCompatActivity {
 
-    Button btnPlay, btnLeader, btnQuit, btnSend;
-    EditText W, H, name, point;
-
+    private Button btnPlay, btnLeader, btnQuit, btnSend;
+    private EditText W,H,name,point;
+    private User user;
+    private SaveGame saveGame;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +40,8 @@ public class MainMenu extends AppCompatActivity {
         init();
     }
     private void init(){
+        saveGame = new SaveGame(getApplicationContext());
+        getSavedGame();
         btnPlay = findViewById(R.id.btnPlay);
         btnLeader = findViewById(R.id.btnLeaderBoard);
         btnQuit = findViewById(R.id.btnQuit);
@@ -40,6 +59,7 @@ public class MainMenu extends AppCompatActivity {
                 if(W.getText().toString().length() != 0 && H.getText().toString().length() != 0) {
                     intent.putExtra("W", Integer.parseInt(W.getText().toString()));
                     intent.putExtra("H", Integer.parseInt(H.getText().toString()));
+                    intent.putExtra("user",user);
                     startActivity(intent);
                 }
             }
@@ -57,7 +77,6 @@ public class MainMenu extends AppCompatActivity {
                 finish();
             }
         });
-
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +88,56 @@ public class MainMenu extends AppCompatActivity {
                 }).start();
             }
         });
+    }
 
+    private void createNewUser(){
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View addUser = inflater.inflate(R.layout.dialog_create_user,null);
+
+        AlertDialog createUserDialog = new AlertDialog.Builder(this)
+                .setCancelable(false)
+                .setView(addUser)
+                .setPositiveButton(android.R.string.ok, null)
+                .create();
+        createUserDialog.show();
+        createUserDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText userName = createUserDialog.findViewById(R.id.userName);
+                assert userName != null;
+                if(userName.getText().toString().length() > 3){
+                    user = new User(userName.getText().toString(),0L);
+                    saveGame.saveUser(user);
+
+                    createUserDialog.dismiss();
+                }else {
+                    Toast.makeText(getApplicationContext(), "Имя не может быть короче 3 символов", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
+    private void getSavedGame(){
+        if(saveGame.isFirst())
+            createNewUser();
+        try {
+            user = saveGame.getUser();
+            if(user.getName().length() <= 3)
+                throw new Exception("Username is not Available");
+        } catch (Exception e) {
+            e.printStackTrace();
+            createNewUser();
+        }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveGame.saveUser(user);
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        saveGame.saveUser(user);
     }
 }
