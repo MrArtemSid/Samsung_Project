@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -35,6 +37,7 @@ import okhttp3.Response;
 
 public class LeaderBoard extends AppCompatActivity {
 
+    private Button back;
     ListView listView;
     List<User> users = new ArrayList<>();
 
@@ -43,6 +46,15 @@ public class LeaderBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
         listView = findViewById(R.id.listTest);
+        back = findViewById(R.id.btnBack);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v.getId() == R.id.btnBack)
+                    finish();
+            }
+        });
+
         new Thread(new Runnable() {
             @Override
             public void run() {

@@ -18,6 +18,7 @@
 
 
         <Button
+            android:text="@string/back"
             android:id="@+id/btnBack"
             style="@style/BorderBtn"
             android:layout_width="match_parent"
