@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">testNode</string>
+    <string name="app_name">NodeMaze</string>
     <string name="play">PLAY</string>
     <string name="leaderBoard">LEADER</string>
     <string name="quit">QUIT</string>
