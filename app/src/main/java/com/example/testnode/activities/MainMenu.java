@@ -97,8 +97,10 @@ public class MainMenu extends AppCompatActivity {
 
 
     private void getSavedGame(){
-        if(saveGame.isFirst())
+        if(saveGame.isFirst()) {
             createNewUser();
+            return;
+        }
         try {
             user = saveGame.getUser();
             if(user.getName().length() <= 3)
