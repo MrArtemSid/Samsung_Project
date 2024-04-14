@@ -67,8 +67,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void init(){
-        this.W = getIntent().getIntExtra("W",5);
-        this.H = getIntent().getIntExtra("H",5);
+
+        Random random = new Random();
+        int newSize = random.nextInt(5) + 5;
+        this.W = newSize;
+        this.H = newSize;
+
         this.user = (User) getIntent().getSerializableExtra("user");
         saveGame = new SaveGame(getApplicationContext());
         back = findViewById(R.id.btnBack);
@@ -152,12 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         connect();
     }
     private void changeLevel() {
-        Random random = new Random();
-        int newSize = random.nextInt(5) + 5;
-
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
-        intent.putExtra("W", newSize);
-        intent.putExtra("H", newSize);
         intent.putExtra("user", user);
         startActivity(intent);
 
