@@ -3,6 +3,7 @@ package com.example.testnode.activities;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -40,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -149,6 +151,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         connect();
     }
+    private void changeLevel() {
+        Random random = new Random();
+        int newSize = random.nextInt(5) + 5;
+
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.putExtra("W", newSize);
+        intent.putExtra("H", newSize);
+        intent.putExtra("user", user);
+        startActivity(intent);
+
+        finish();
+    }
     private void connect(){
         used = new boolean[W*H + 1];
         checkConnect(game.getStart());
@@ -177,11 +191,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(View v) {
                     user.addPoint();
-                    game.newGame();
+                    changeLevel();
                     winDialog.dismiss();
                 }
             });
-
         }
     }
     @Override
