@@ -12,26 +12,39 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class DB {
-    public static void addUser(String name){
+    private static final String URL = "https://yeti-new-physically.ngrok-free.app:8080";
+    public static void addUser(User user){
         OkHttpClient client = new OkHttpClient();
-        String json = String.format("{\"name\":\"%s\",\"point\":%d}",name,0);
+        String json = String.format("{\"name\":\"%s\",\"point\":%d}",user.getName(),user.getPoints());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        Request request = new Request.Builder().url("http://192.168.0.12:8080/addUser").post(requestBody).build();
+        Request request = new Request.Builder().url(URL+"/addUser").post(requestBody).build();
         try {
             Response response = client.newCall(request).execute();
         } catch (IOException e) {
             Log.d("MYRESPONSE",e.toString());
         }
     }
-    public static void updatePoint(String name, Long point){
+    public static void updatePoint(User user){
         OkHttpClient client = new OkHttpClient();
-        String json = String.format("{\"name\":\"%s\",\"point\":%d}",name,point);
+        String json = String.format("{\"name\":\"%s\",\"point\":%d}",user.getName(),user.getPoints());
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        Request request = new Request.Builder().url("http://192.168.0.12:8080/updatePoint").post(requestBody).build();
+        Request request = new Request.Builder().url(URL+"/updatePoints").post(requestBody).build();
         try {
             Response response = client.newCall(request).execute();
         } catch (IOException e) {
             Log.d("MYRESPONSE",e.toString());
         }
     }
+
+    public static boolean check(String name){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(String.format("%s/checkName?name=%s", URL, name)).build();
+        try{
+            Response response = client.newCall(request).execute();
+            return response.body().string().equals("false");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

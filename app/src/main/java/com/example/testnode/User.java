@@ -15,7 +15,7 @@ public class User implements Serializable {
     }
     @Override
     public String toString(){
-        return name +'\n'+points.toString();
+        return name +"\n"+points.toString();
     }
 
     public String getName() {

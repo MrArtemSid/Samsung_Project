@@ -52,11 +52,11 @@ public class LeaderBoard extends AppCompatActivity {
     }
     private void getDb(){
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url("http://192.168.0.12:8080/getAll").build();
+        Request request = new Request.Builder().url("https://yeti-new-physically.ngrok-free.app:8080/getAll").build();
         try (Response response = client.newCall(request).execute()) {
             users = stringToArray(response.body().string(), User[].class);
             ArrayAdapter<User> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, users);
+                    R.layout.list_item_1, users);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

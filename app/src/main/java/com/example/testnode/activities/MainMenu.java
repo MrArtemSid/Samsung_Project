@@ -86,8 +86,27 @@ public class MainMenu extends AppCompatActivity {
                 if(userName.getText().toString().length() > 3){
                     user = new User(userName.getText().toString(),0L);
                     saveGame.saveUser(user);
-
-                    createUserDialog.dismiss();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(DB.check(user.getName())) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Имя уже занято", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return;
+                            }
+                            DB.addUser(user);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    createUserDialog.dismiss();
+                                }
+                            });
+                        }
+                    }).start();
                 }else {
                     Toast.makeText(getApplicationContext(), "Имя не может быть короче 3 символов", Toast.LENGTH_SHORT).show();
                 }

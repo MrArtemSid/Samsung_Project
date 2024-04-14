@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.testnode.DB;
 import com.example.testnode.User;
 import com.example.testnode.gameLogic.Directions;
 import com.example.testnode.gameLogic.Game;
@@ -191,6 +192,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(View v) {
                     user.addPoint();
                     changeLevel();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DB.updatePoint(user);
+                        }
+                    }).start();
                     winDialog.dismiss();
                 }
             });
