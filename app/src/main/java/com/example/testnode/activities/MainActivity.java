@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.service.autofill.OnClickAction;
 import android.util.Log;
 import android.view.Display;
@@ -63,11 +64,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private User user;
     private SaveGame saveGame;
 
+    private Handler mHandler;
+    private Runnable mRunnable;
+    private static final long TIMEOUT_MILLISECONDS = 25000;
+    private MediaPlayer mMediaPlayer;
+    private int currWaitSong = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        timer_create();
+    }
+
+    void timer_create() {
+        mMediaPlayer = MediaPlayer.create(this, R.raw.wait1);
+        mHandler = new Handler();
+        mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                changeMediaPlayerSound();
+                mMediaPlayer.start();
+                mHandler.postDelayed(mRunnable, TIMEOUT_MILLISECONDS);
+            }
+        };
+        mHandler.postDelayed(mRunnable, TIMEOUT_MILLISECONDS);
+    }
+    void timer_kill() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+
+        if (mHandler != null && mRunnable != null) {
+            mHandler.removeCallbacks(mRunnable);
+        }
+    }
+
+    private void changeMediaPlayerSound() {
+        timer_kill();
+        int currWait;
+
+        if (currWaitSong == 0) {
+            currWait = R.raw.wait1;
+        } else
+        {
+            currWait = R.raw.wait2;
+        }
+
+        mMediaPlayer = MediaPlayer.create(this, currWait);
+        currWaitSong = (currWaitSong + 1) % 2;
     }
 
     private void init(){
@@ -182,8 +230,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         changeColor(game.getStart(),Color.BLUE);
         changeColor(game.getFinish(),Color.GREEN);
         if(used[game.getStart()] && used[game.getFinish()]){
-
-
             LayoutInflater inflater = LayoutInflater.from(this);
             View win = inflater.inflate(R.layout.dialog_win,null);
 
@@ -205,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else {
                 id_music = R.raw.anime_win;
             }
+            timer_kill();
 
             MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), id_music);
             mediaPlayer.start();
@@ -227,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mediaPlayer.stop();
                     if(user.isCheck())
                         DB.updatePoint(user);
+                    timer_kill();
                     winDialog.dismiss();
                 }
             });
@@ -234,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     @Override
     public void onClick(View v) {
+        timer_kill();
         if(v.getId() == R.id.btnBack) {
             finish();
             saveGame.saveUser(user);
@@ -244,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             used = new boolean[W * H + 1];
             connect();
         }
+        timer_create();
     }
     @Override
     public void onPause() {
@@ -255,5 +305,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         saveGame.saveUser(user);
     }
-
 }
