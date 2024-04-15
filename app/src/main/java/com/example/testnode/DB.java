@@ -16,7 +16,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class DB {
-    private static final String URL = "https://yeti-new-physically.ngrok-free.app:8080";
+    private static final String URL = "https://yeti-new-physically.ngrok-free.app";
     public static void addUser(User user){
         OkHttpClient client = new OkHttpClient();
         String json = String.format("{\"name\":\"%s\",\"point\":%d}",user.getName(),user.getPoints());
