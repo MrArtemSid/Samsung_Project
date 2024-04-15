@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void timer_create() {
-        mMediaPlayer = MediaPlayer.create(this, R.raw.wait1);
+        mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.wait1);
         mHandler = new Handler();
         mRunnable = new Runnable() {
             @Override
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currWait = R.raw.wait2;
         }
 
-        mMediaPlayer = MediaPlayer.create(this, currWait);
+        mMediaPlayer = MediaPlayer.create(getApplicationContext(), currWait);
         currWaitSong = (currWaitSong + 1) % 2;
     }
 
@@ -291,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             v.setRotation((v.getRotation() + 90) % 360);
             game.getNodes().get(v.getId()).changeDirection();
             used = new boolean[W * H + 1];
+
             connect();
         }
         timer_create();
@@ -299,10 +300,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onPause() {
         super.onPause();
         saveGame.saveUser(user);
+        timer_kill();
     }
     @Override
     public void onDestroy(){
         super.onDestroy();
         saveGame.saveUser(user);
+        timer_kill();
     }
 }
