@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(Node node : game.getNodes()){
             int rr = random.nextInt(4);
             nodesImages.add(new ImageView(this));
+            nodesImages.getLast().setSoundEffectsEnabled(false);
             nodesImages.getLast().setImageResource(node.getResId());
             nodesImages.getLast().setOnClickListener(this);
             nodesImages.getLast().setId(nodesImages.size() - 1);
@@ -286,12 +287,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(v.getId() == R.id.btnBack) {
             finish();
             saveGame.saveUser(user);
+
         }
         else {
             v.setRotation((v.getRotation() + 90) % 360);
             game.getNodes().get(v.getId()).changeDirection();
             used = new boolean[W * H + 1];
-
+            MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.click1);
+            mediaPlayer.start();
             connect();
         }
         timer_create();
