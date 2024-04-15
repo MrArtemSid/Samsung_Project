@@ -13,12 +13,13 @@ public class SaveGame {
     private final SharedPreferences save;
     private final String USERNAME = "username";
     private final String POINT = "point";
+    private final String CHECK = "check";
 
     public SaveGame(Context context){
         save = context.getSharedPreferences("com.example.testnode", MODE_PRIVATE);
     }
     public boolean isFirst(){
-        if(save.getBoolean("first",true)){
+        if(save.getBoolean("first",true) && save.getString(USERNAME, "").equals("")){
             save.edit().putBoolean("first",false).apply();
             return true;
         }else{
@@ -26,10 +27,11 @@ public class SaveGame {
         }
     }
     public void saveUser(User user){
-        save.edit().putLong("point",user.getPoints()).apply();
-        save.edit().putString("username",user.getName()).apply();
+        save.edit().putLong(POINT,user.getPoints()).apply();
+        save.edit().putString(USERNAME,user.getName()).apply();
+        save.edit().putBoolean(CHECK,user.isCheck()).apply();
     }
     public User getUser(){
-        return new User(save.getString(USERNAME, "def"), save.getLong(POINT,0L));
+        return new User(save.getString(USERNAME, ""), save.getLong(POINT,0L),save.getBoolean(CHECK,false));
     }
 }

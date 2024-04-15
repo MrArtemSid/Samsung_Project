@@ -3,7 +3,11 @@ package com.example.testnode;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -25,15 +29,20 @@ public class DB {
         }
     }
     public static void updatePoint(User user){
-        OkHttpClient client = new OkHttpClient();
-        String json = String.format("{\"name\":\"%s\",\"point\":%d}",user.getName(),user.getPoints());
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        Request request = new Request.Builder().url(URL+"/updatePoints").post(requestBody).build();
-        try {
-            Response response = client.newCall(request).execute();
-        } catch (IOException e) {
-            Log.d("MYRESPONSE",e.toString());
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String json = String.format("{\"name\":\"%s\",\"point\":%d}",user.getName(),user.getPoints());
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+                Request request = new Request.Builder().url(URL+"/updatePoints").post(requestBody).build();
+                try {
+                    Response response = client.newCall(request).execute();
+                } catch (IOException e) {
+                    Log.d("MYRESPONSE",e.toString());
+                }
+            }
+        }).start();
     }
 
     public static boolean check(String name){
@@ -45,6 +54,23 @@ public class DB {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<User> getAll(){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(URL + "/getAll").build();
+        try (Response response = client.newCall(request).execute()) {
+            List<User> users = stringToArray(response.body().string(), User[].class);
+            return users;
+        } catch (IOException e) {
+            Log.d("MYRESPONSE",e.toString());
+        }
+        return null;
+    }
+
+    public static <T> List<T> stringToArray(String s, Class<T[]> clazz) {
+        T[] arr = new Gson().fromJson(s, clazz);
+        return Arrays.asList(new Gson().fromJson(s, clazz));
     }
 
 }

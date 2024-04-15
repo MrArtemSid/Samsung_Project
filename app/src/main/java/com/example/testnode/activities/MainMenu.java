@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testnode.DB;
@@ -32,6 +33,7 @@ public class MainMenu extends AppCompatActivity {
     private Button btnPlay, btnLeader, btnQuit;
     private User user;
     private SaveGame saveGame;
+    private TextView tvUserName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,8 @@ public class MainMenu extends AppCompatActivity {
         btnPlay = findViewById(R.id.btnPlay);
         btnLeader = findViewById(R.id.btnLeaderBoard);
         btnQuit = findViewById(R.id.btnQuit);
+        tvUserName = findViewById(R.id.tvUserName);
+        tvUserName.setText(saveGame.getUser().getName());
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,8 +60,43 @@ public class MainMenu extends AppCompatActivity {
         btnLeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LeaderBoard.class);
-                startActivity(intent);
+                try {
+                    if (!user.isCheck()) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (DB.check(user.getName())) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "Имя уже занято", Toast.LENGTH_SHORT).show();
+                                                createNewUser();
+                                            }
+                                        });
+                                        return;
+                                    }
+                                    user.setCheck(true);
+                                    saveGame.saveUser(user);
+                                    DB.addUser(user);
+                                } catch (Exception e) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "Отсутствует соединение с сервером", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), LeaderBoard.class);
+                        startActivity(intent);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
         btnQuit.setOnClickListener(new View.OnClickListener() {
@@ -84,29 +123,37 @@ public class MainMenu extends AppCompatActivity {
                 EditText userName = createUserDialog.findViewById(R.id.userName);
                 assert userName != null;
                 if(userName.getText().toString().length() > 3){
-                    user = new User(userName.getText().toString(),0L);
+                    user = new User(userName.getText().toString(),saveGame.getUser().getPoints(), saveGame.getUser().isCheck());
                     saveGame.saveUser(user);
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(DB.check(user.getName())) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getApplicationContext(), "Имя уже занято", Toast.LENGTH_SHORT).show();
+                    try {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (DB.check(user.getName())) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(getApplicationContext(), "Имя уже занято", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        return;
                                     }
-                                });
-                                return;
-                            }
-                            DB.addUser(user);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                                    user.setCheck(true);
+                                    saveGame.saveUser(user);
+                                    DB.addUser(user);
                                     createUserDialog.dismiss();
+                                }catch (Exception e){
+                                    createUserDialog.dismiss();
+                                    e.printStackTrace();
                                 }
-                            });
-                        }
-                    }).start();
+                            }
+                        }).start();
+                    }catch (Exception e){
+                        createUserDialog.dismiss();
+                        e.printStackTrace();
+                    }
+                    tvUserName.setText(saveGame.getUser().getName());
                 }else {
                     Toast.makeText(getApplicationContext(), "Имя не может быть короче 3 символов", Toast.LENGTH_SHORT).show();
                 }
@@ -128,6 +175,11 @@ public class MainMenu extends AppCompatActivity {
             e.printStackTrace();
             createNewUser();
         }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        user = saveGame.getUser();
     }
     @Override
     public void onPause() {

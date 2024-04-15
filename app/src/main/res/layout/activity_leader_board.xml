@@ -18,9 +18,9 @@
 
 
         <Button
-            android:text="@string/back"
             android:id="@+id/btnBack"
             style="@style/BorderBtn"
+            android:text="@string/back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

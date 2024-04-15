@@ -10,9 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
+import com.example.testnode.DB;
 import com.example.testnode.R;
 import com.example.testnode.User;
+import com.example.testnode.gameLogic.SaveGame;
 import com.google.gson.Gson;
 
 import org.apache.http.client.HttpClient;
@@ -37,36 +40,34 @@ import okhttp3.Response;
 
 public class LeaderBoard extends AppCompatActivity {
 
-    private Button back;
-    ListView listView;
-    List<User> users = new ArrayList<>();
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
+        init();
+    }
+    private void init(){
         listView = findViewById(R.id.listTest);
-        back = findViewById(R.id.btnBack);
-        back.setOnClickListener(new View.OnClickListener() {
+        Button btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(v.getId() == R.id.btnBack)
-                    finish();
+                finish();
             }
         });
-
         new Thread(new Runnable() {
             @Override
             public void run() {
-                getDb();
+                showAll();
             }
         }).start();
     }
-    private void getDb(){
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url("https://yeti-new-physically.ngrok-free.app:8080/getAll").build();
-        try (Response response = client.newCall(request).execute()) {
-            users = stringToArray(response.body().string(), User[].class);
+    private void showAll(){
+            List<User> users = DB.getAll();
+            if(users == null)
+                return;
             ArrayAdapter<User> adapter = new ArrayAdapter<>(this,
                     R.layout.list_item_1, users);
             runOnUiThread(new Runnable() {
@@ -75,9 +76,6 @@ public class LeaderBoard extends AppCompatActivity {
                     listView.setAdapter(adapter);
                 }
             });
-        } catch (IOException e) {
-            Log.d("MYRESPONSE",e.toString());
-        }
     }
     public <T> List<T> stringToArray(String s, Class<T[]> clazz) {
         T[] arr = new Gson().fromJson(s, clazz);

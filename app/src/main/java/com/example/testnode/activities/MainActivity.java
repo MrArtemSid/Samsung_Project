@@ -140,8 +140,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showGraph(){
         Display display = getWindowManager().getDefaultDisplay();
         nodesImages.clear();
-
+        Random random = new Random();
         for(Node node : game.getNodes()){
+            int rr = random.nextInt(4);
             nodesImages.add(new ImageView(this));
             nodesImages.getLast().setImageResource(node.getResId());
             nodesImages.getLast().setOnClickListener(this);
@@ -151,6 +152,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 nodesImages.getLast().setBackground(ContextCompat.getDrawable(this, R.drawable.gold_border));
             else
                 nodesImages.getLast().setBackground(ContextCompat.getDrawable(this, R.drawable.normal_border));
+            for(int i = 0; i < rr; i++){
+                node.changeDirection();
+            }
+            nodesImages.getLast().setRotation(nodesImages.getLast().getRotation() + 90 * rr);
             gridLayout.addView(nodesImages.getLast());
 
         }
@@ -192,12 +197,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onClick(View v) {
                     user.addPoint();
                     changeLevel();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            DB.updatePoint(user);
-                        }
-                    }).start();
+                    if(user.isCheck())
+                        DB.updatePoint(user);
                     winDialog.dismiss();
                 }
             });
@@ -205,8 +206,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btnBack)
+        if(v.getId() == R.id.btnBack) {
             finish();
+            saveGame.saveUser(user);
+        }
         else {
             v.setRotation((v.getRotation() + 90) % 360);
             game.getNodes().get(v.getId()).changeDirection();
