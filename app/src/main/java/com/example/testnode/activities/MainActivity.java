@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.service.autofill.OnClickAction;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -180,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         changeColor(game.getFinish(),Color.GREEN);
         if(used[game.getStart()] && used[game.getFinish()]){
 
+
             LayoutInflater inflater = LayoutInflater.from(this);
             View win = inflater.inflate(R.layout.dialog_win,null);
 
@@ -191,6 +195,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             winDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner));
             winDialog.show();
+
+            int id_music = 0;
+            if (user.getPoints() % 20 == 0 && user.getPoints() != 0) {
+                id_music = R.raw.many_wins;
+                TextView winText = win.findViewById(R.id.winText);
+                winText.setText("You're amazing");
+            }
+            else {
+                id_music = R.raw.anime_win;
+            }
+
+            MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), id_music);
+            mediaPlayer.start();
 
 //            winDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -207,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onCancel(DialogInterface dialog) {
                     user.addPoint();
                     changeLevel();
+                    mediaPlayer.stop();
                     if(user.isCheck())
                         DB.updatePoint(user);
                     winDialog.dismiss();
