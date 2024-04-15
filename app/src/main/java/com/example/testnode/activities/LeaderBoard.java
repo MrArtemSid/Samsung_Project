@@ -92,6 +92,7 @@ public class LeaderBoard extends AppCompatActivity {
 
                         if (user.getName().equals(saveGame.getUser().getName())) {
                             textView.setTextColor(Color.rgb(204,255,255));
+                            textView.setText(String.format("Ваш результат\n%d", user.getPoints()));
                         } else {
                             textView.setTextColor(Color.WHITE);
                         }
