@@ -243,19 +243,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             winDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner));
             winDialog.show();
 
-            int id_music = 0;
-            if (user.getPoints() % 20 == 0 && user.getPoints() != 0) {
-                id_music = R.raw.many_wins;
-                TextView winText = win.findViewById(R.id.winText);
-                winText.setText("You're amazing");
-            }
-            else {
-                id_music = R.raw.anime_win;
-            }
-            timer_kill();
-
-            MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), id_music);
-            mediaPlayer.start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int id_music = 0;
+                    if (user.getPoints() % 20 == 0 && user.getPoints() != 0) {
+                        id_music = R.raw.many_wins;
+                        TextView winText = win.findViewById(R.id.winText);
+                        winText.setText("You're amazing");
+                    }
+                    else {
+                        id_music = R.raw.anime_win;
+                    }
+                    timer_kill();
+                    mMediaPlayer = MediaPlayer.create(getApplicationContext(), id_music);
+                    mMediaPlayer.start();
+                }
+            }).start();
 
 //            winDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -272,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onCancel(DialogInterface dialog) {
                     user.addPoint();
                     changeLevel();
-                    mediaPlayer.stop();
+                    mMediaPlayer.stop();
                     if(user.isCheck())
                         DB.updatePoint(user);
                     timer_kill();
@@ -293,11 +297,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             v.setRotation((v.getRotation() + 90) % 360);
             game.getNodes().get(v.getId()).changeDirection();
             used = new boolean[W * H + 1];
-            MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.click1);
-            mediaPlayer.start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    timer_kill();
+                    mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.click1);
+                    mMediaPlayer.start();
+                }
+            }).start();
+
+            timer_create();
             connect();
         }
-        timer_create();
     }
     @Override
     public void onPause() {
