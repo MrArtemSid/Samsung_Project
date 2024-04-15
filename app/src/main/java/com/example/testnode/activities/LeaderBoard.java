@@ -1,15 +1,20 @@
 package com.example.testnode.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testnode.DB;
@@ -41,6 +46,7 @@ import okhttp3.Response;
 public class LeaderBoard extends AppCompatActivity {
 
     private ListView listView;
+    private SaveGame saveGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public class LeaderBoard extends AppCompatActivity {
     private void init(){
         listView = findViewById(R.id.listTest);
         Button btnBack = findViewById(R.id.btnBack);
+        saveGame = new SaveGame(getApplicationContext());
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,17 +72,35 @@ public class LeaderBoard extends AppCompatActivity {
         }).start();
     }
     private void showAll(){
-            List<User> users = DB.getAll();
-            if(users == null)
-                return;
-            ArrayAdapter<User> adapter = new ArrayAdapter<>(this,
-                    R.layout.list_item_1, users);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    listView.setAdapter(adapter);
-                }
-            });
+        List<User> users = DB.getAll();
+
+        if(users == null)
+            return;
+        ArrayAdapter<User> adapter = new ArrayAdapter<>(this,
+                R.layout.list_item_1, users);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayAdapter<User> adapter = new ArrayAdapter<User>(getApplicationContext(), R.layout.list_item_1, users) {
+                    @NonNull
+                    @Override
+                    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                        View view = super.getView(position, convertView, parent);
+
+                        TextView textView = view.findViewById(android.R.id.text1);
+                        User user = users.get(position);
+
+                        if (user.getName().equals(saveGame.getUser().getName())) {
+                            textView.setTextColor(Color.rgb(204,255,255));
+                        } else {
+                            textView.setTextColor(Color.WHITE);
+                        }
+                        return view;
+                    }
+                };
+                listView.setAdapter(adapter);
+            }
+        });
     }
     public <T> List<T> stringToArray(String s, Class<T[]> clazz) {
         T[] arr = new Gson().fromJson(s, clazz);
