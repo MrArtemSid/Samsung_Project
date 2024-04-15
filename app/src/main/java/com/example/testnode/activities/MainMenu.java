@@ -116,6 +116,7 @@ public class MainMenu extends AppCompatActivity {
                 .setView(addUser)
                 .setPositiveButton(android.R.string.ok, null)
                 .create();
+        createUserDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner_signup));
         createUserDialog.show();
         createUserDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
