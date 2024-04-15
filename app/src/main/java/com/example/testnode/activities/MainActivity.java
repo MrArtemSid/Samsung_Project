@@ -184,17 +184,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             View win = inflater.inflate(R.layout.dialog_win,null);
 
             AlertDialog winDialog = new AlertDialog.Builder(this)
-                    .setCancelable(false)
+                    //.setCancelable(false)
                     .setView(win)
-                    .setPositiveButton(android.R.string.ok, null)
+                    //.setPositiveButton(android.R.string.ok, null)
                     .create();
 
             winDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner));
             winDialog.show();
 
-            winDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//            winDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    user.addPoint();
+//                    changeLevel();
+//                    if(user.isCheck())
+//                        DB.updatePoint(user);
+//                    winDialog.dismiss();
+//                }
+//            });
+            winDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
-                public void onClick(View v) {
+                public void onCancel(DialogInterface dialog) {
                     user.addPoint();
                     changeLevel();
                     if(user.isCheck())
