@@ -26,8 +26,8 @@ public class User implements Serializable {
     public Long getPoints() {
         return points;
     }
-    public void addPoint(){
-        this.points++;
+    public void addPoint(int size){
+        this.points += size;
     }
     public boolean isCheck() {
         return check;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -8,9 +9,7 @@
         android:layout_height="match_parent"
         android:src="@mipmap/background"
         android:scaleType="centerCrop"/>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activities.MainMenu">
@@ -42,33 +41,76 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            style="@style/BorderBtn"
             android:id="@+id/btnQuit"
-            android:text="@string/quit"
+            style="@style/BorderBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/quit"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLeaderBoard"
+            app:layout_constraintVertical_bias="0.315" />
+
+        <Button
+            android:id="@+id/howToPlayBtn"
+            style="@style/BorderBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/how_to_play"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnLeaderBoard"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:textSize="32sp"
-            android:fontFamily="@font/borsok"
             android:id="@+id/tvUserName"
-            android:textColor="#FFEBEE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/borsok"
             android:gravity="center"
+            android:textColor="#FFEBEE"
+            android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnQuit"
-            app:layout_constraintVertical_bias="0.25" />
+            app:layout_constraintVertical_bias="0.359" />
+        <!--
 
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_difct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/borsok"
+                    android:text="@string/difficulty"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toTopOf="@+id/difficulty"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.81" />
+
+                <SeekBar
+                    android:id="@+id/difficulty"
+                    style="@style/BorderBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:max="3"
+                    android:progress="1"
+                    android:progressBackgroundTint="@color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/btnPlay"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.555" />
+
+        -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

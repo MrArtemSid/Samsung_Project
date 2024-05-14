@@ -15,16 +15,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TestNode"
         android:usesCleartextTraffic="true"
-
         tools:targetApi="31">
         <activity
-            android:name=".activities.LeaderBoard"
-            android:screenOrientation="portrait"
+            android:name=".activities.HowToPlay"
             android:exported="false" />
         <activity
+            android:name=".activities.Difficulty"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LeaderBoard"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.MainMenu"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,9 +38,9 @@
         </activity>
         <activity
             android:name=".activities.MainActivity"
+            android:configChanges="screenSize|smallestScreenSize|orientation|screenLayout"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:configChanges="screenSize|smallestScreenSize|orientation|screenLayout"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

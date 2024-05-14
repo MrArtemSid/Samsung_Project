@@ -1,10 +1,51 @@
 <resources>
     <string name="app_name">NodeMaze</string>
-    <string name="play">PLAY</string>
-    <string name="leaderBoard">LEADER</string>
-    <string name="quit">QUIT</string>
-    <string name="createUser">Choose nickname</string>
-    <string name="enterName">Enter name</string>
-    <string name="back">back</string>
-    <string name="you_win">you win</string>
+    <string name="play">Играть</string>
+    <string name="leaderBoard">Лидеры</string>
+    <string name="quit">Выход</string>
+    <string name="createUser">Введите имя</string>
+    <string name="enterName">Введите имя</string>
+    <string name="back">Назад</string>
+    <string name="you_win">Победа</string>
+    <string name="difficulty">Сложность: Нормальная</string>
+    <string name="easy">Легкая</string>
+    <string name="normal">Нормальная</string>
+    <string name="hard">Сложная</string>
+    <string name="random">Рандом</string>
+
+    <string-array name="howToPlayar">
+        <item>Цель игры - соединить <font color="blue">старт</font> и <font color="green">финиш</font>.</item>
+        <item>Для этого нужно нажать на узлы игрового поля, от нажатия они будут <font color="red">вращаться</font> и,</item>
+        <item>если у нажатого узда будет достигнуто соединение со <font color="blue">стартовой</font> вершиной, то он окрасится в</item>
+        <item><font color="blue">синий</font> цвет. Игровое поле имеет форму квадрата размером NxN.</item>
+        <item>Перед началом игры будет предложен выбор сложности, он будет изменять размеригрового поля.</item>
+        <item>Для <font color="green">Легкого</font> это от 4 до 6.</item>
+        <item>Для <font color="blue">Среднего</font> это от 7 до 9.</item>
+        <item>Для <font color="red">Сложного</font> это от 10 до 12.</item>
+        <item>Также есть сложность <font color="green">Рандом</font>, для него размеры поля от 4 до 12.</item>
+        <item>Если вы захотите сравнить свой результат с другими игроками, то нужно нажать кнопку <font color="red">Лидеры</font> в главном меню,</item>
+        <item>вы попадете в список игроков, где у каждого будет написано его имя и количество набранных им очков.</item>
+        <item>Для выхода из игры нажмите кнопку <font color="red">Выход</font>.</item>
+    </string-array>
+
+    <string name="howToPlay">
+        <![CDATA[
+        <html>
+        Цель игры - соединить <font color="blue">старт</font> и <font color="green">финиш</font>.<br/>
+        Для этого нужно нажать на узлы игрового поля, от нажатия они будут <font color="red">вращаться</font> и,<br/>
+        если у нажатого узда будет достигнуто соединение со <font color="blue">стартовой</font> вершиной, то он окрасится в<br/>
+        <font color="blue">синий</font> цвет. Игровое поле имеет форму квадрата размером <font color="red">NxN</font>.<br/>
+        Перед началом игры будет предложен выбор сложности, он будет изменять размеригрового поля.<br/>
+        <ul>
+        <li>Для <font color="green">Легкого</font> это от 4 до 6.</li>
+        <li>Для <font color="blue">Среднего</font> это от 7 до 9.</li>
+        <li>Для <font color="red">Сложного</font> это от 10 до 12.</li>
+        </ul>
+        Также есть сложность <font color="green">Рандом</font>, для него размеры поля \n от 4 до 12.<br/>
+        Если вы захотите сравнить свой результат с другими игроками, то нужно нажать кнопку <font color="red">Лидеры</font> в главном меню,<br/>
+        вы попадете в список игроков, где у каждого будет написано его имя и количество набранных им очков.<br/>
+        Для выхода из игры нажмите кнопку <font color="red">Выход</font>.
+        </html>]]>
+    </string>
+    <string name="how_to_play">Помощь</string>
 </resources>

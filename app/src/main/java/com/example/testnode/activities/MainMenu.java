@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +30,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class MainMenu extends AppCompatActivity {
-
-    private Button btnPlay, btnLeader, btnQuit;
+    //private SeekBar diffucilty;
+    private Button btnPlay, btnLeader, btnQuit, btnHowToPlay;
     private User user;
     private SaveGame saveGame;
-    private TextView tvUserName;
+    private TextView tvUserName; //, tvDifclt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,19 +42,60 @@ public class MainMenu extends AppCompatActivity {
         init();
     }
     private void init(){
+        //diffucilty =  findViewById(R.id.difficulty);
         saveGame = new SaveGame(getApplicationContext());
         getSavedGame();
         btnPlay = findViewById(R.id.btnPlay);
         btnLeader = findViewById(R.id.btnLeaderBoard);
         btnQuit = findViewById(R.id.btnQuit);
+        btnHowToPlay = findViewById(R.id.howToPlayBtn);
         tvUserName = findViewById(R.id.tvUserName);
         tvUserName.setText(saveGame.getUser().getName());
+        //tvDifclt = findViewById(R.id.tv_difct);
 
+/*        diffucilty.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                switch (progress){
+                    case 0:
+                        tvDifclt.setText("Difficulty: Easy");
+                        break;
+                    case 1:
+                        tvDifclt.setText("Difficulty: Normal");
+                        break;
+                    case 2:
+                        tvDifclt.setText("Difficulty: Hard");
+                        break;
+                    case 3:
+                        tvDifclt.setText("Difficulty: Random");
+                        break;
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });*/
+
+        btnHowToPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HowToPlay.class);
+                startActivity(intent);
+            }
+        });
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Difficulty.class);
                 intent.putExtra("user",user);
+                //intent.putExtra("difficulty",diffucilty.getProgress());
                 startActivity(intent);
             }
         });

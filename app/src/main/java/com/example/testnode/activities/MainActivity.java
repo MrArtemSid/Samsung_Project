@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final long TIMEOUT_MILLISECONDS = 25000;
     private MediaPlayer mMediaPlayer;
     private int currWaitSong = 0;
+    private int diff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,9 +118,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void init(){
-
         Random random = new Random();
-        int newSize = random.nextInt(5) + 5;
+        int newSize = random.nextInt(7) + 6;
+        diff = getIntent().getIntExtra("difficulty",1);
+        switch (diff){
+            case 0:
+                newSize = (random.nextInt(3) + 4);
+                break;
+            case 1:
+                newSize = (random.nextInt(3) + 7);
+                break;
+            case 2:
+                newSize = (random.nextInt(3) + 10);
+                break;
+            case 3:
+                newSize = random.nextInt(9) + 4;
+                break;
+
+        }
+
         this.W = newSize;
         this.H = newSize;
 
@@ -212,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     private void changeLevel() {
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.putExtra("difficulty",diff);
         intent.putExtra("user", user);
         startActivity(intent);
 
@@ -230,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(used[game.getStart()] && used[game.getFinish()]){
             LayoutInflater inflater = LayoutInflater.from(this);
             View win = inflater.inflate(R.layout.dialog_win,null);
+            ((TextView)win.findViewById(R.id.winText)).setText(String.format("Победа\n+%d",game.getLevel().getH()));
 
             AlertDialog winDialog = new AlertDialog.Builder(this)
                     //.setCancelable(false)
@@ -238,13 +258,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .create();
 
             winDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.corner));
+
             winDialog.show();
 
             int id_music = 0;
             if (user.getPoints() % 20 == 0 && user.getPoints() != 0) {
                 id_music = R.raw.many_wins;
                 TextView winText = win.findViewById(R.id.winText);
-                winText.setText("You're amazing");
+                winText.setText(String.format("А ты хорош!\n+%d",game.getLevel().getH()));
             }
             else {
                 id_music = R.raw.anime_win;
@@ -266,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             winDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    user.addPoint();
+                    user.addPoint(game.getLevel().getH());
                     changeLevel();
                     mMediaPlayer.stop();
                     if(user.isCheck())
