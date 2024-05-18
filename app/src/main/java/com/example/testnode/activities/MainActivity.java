@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             winDialog.show();
 
             int id_music = 0;
-            if (user.getPoints() % 20 == 0 && user.getPoints() != 0) {
+            if ((user.getPoints() / 10) % 20 == 0 && user.getPoints() >= 10 * 20) {
                 id_music = R.raw.many_wins;
                 TextView winText = win.findViewById(R.id.winText);
                 winText.setText(String.format("А ты хорош!\n+%d",game.getLevel().getH()));
